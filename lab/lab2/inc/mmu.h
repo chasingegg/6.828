@@ -13,7 +13,7 @@
  *
  */
 
-// A linear address 'la' has a three-part structure as follows:
+// A linear address 'la' has a three-part structure as follows: // 线性地址，在分页翻译地址之前
 //
 // +--------10------+-------10-------+---------12----------+
 // | Page Directory |   Page Table   | Offset within Page  |
@@ -29,10 +29,10 @@
 // page number field of address
 #define PGNUM(la)	(((uintptr_t) (la)) >> PTXSHIFT)
 
-// page directory index
+// page directory index   // 前10位
 #define PDX(la)		((((uintptr_t) (la)) >> PDXSHIFT) & 0x3FF)
 
-// page table index
+// page table index    // 中间10位
 #define PTX(la)		((((uintptr_t) (la)) >> PTXSHIFT) & 0x3FF)
 
 // offset in page

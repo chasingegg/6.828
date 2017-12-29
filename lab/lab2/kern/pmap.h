@@ -22,7 +22,7 @@ extern pde_t *kern_pgdir;
  * and returns the corresponding physical address.  It panics if you pass it a
  * non-kernel virtual address.
  */
-#define PADDR(kva) _paddr(__FILE__, __LINE__, kva)
+#define PADDR(kva) _paddr(__FILE__, __LINE__, kva)  // 虚拟地址转成物理地址
 
 static inline physaddr_t
 _paddr(const char *file, int line, void *kva)
@@ -34,7 +34,7 @@ _paddr(const char *file, int line, void *kva)
 
 /* This macro takes a physical address and returns the corresponding kernel
  * virtual address.  It panics if you pass an invalid physical address. */
-#define KADDR(pa) _kaddr(__FILE__, __LINE__, pa)
+#define KADDR(pa) _kaddr(__FILE__, __LINE__, pa)  // 物理地址转成虚拟地址
 
 static inline void*
 _kaddr(const char *file, int line, physaddr_t pa)
