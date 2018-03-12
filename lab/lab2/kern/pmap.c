@@ -365,8 +365,22 @@ page_decref(struct PageInfo* pp)
 pte_t *
 pgdir_walk(pde_t *pgdir, const void *va, int create)
 {
-	// Fill this function in
-	return NULL;
+	pde_t *pde = pgdir + PDX(va); // compute page dir entry
+	pte_t *pte; 
+	if (*pde & PTE_P) {
+		pte = (pte_t *)KADDR(PTE_ADDR(*pde)); // 计算出页表基址
+		return pte + PTX(va); // 加上偏移得到页表对应entry
+	}
+	// 分配新的物理页 
+	struct PageInfo *newP;
+	if (create == 0) return NULL;
+	newP = page_alloc(ALLOC_ZERO);
+	if (!newP) return NULL;
+
+	newP -> pp_ref++;
+	*pde = page2pa(pde) | PTE_U | PTE_W | PTE_P; 
+	pte = (pte_t *)KADDR(PTE_ADDR(*pde));
+	return pte + PTX(va);
 }
 
 //
@@ -380,10 +394,19 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 // mapped pages.
 //
 // Hint: the TA solution uses pgdir_walk
+// 将va映射到pa 
 static void
 boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm)
 {
-	// Fill this function in
+	int n = size / PGSIZE;
+	int i;
+	pte_t *pte;
+	for (i = 0; i < n; i++) {
+		pte = pgdir_walk(pgdir, (void *)va, 1); // 用前面写好的pgdir_walk来计算页表入口项的地址
+		*pte = pa | perm | PTE_P;
+		va += PGSIZE;
+		pa += PGSIZE;
+	}
 }
 
 //

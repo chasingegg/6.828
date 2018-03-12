@@ -35,7 +35,7 @@
 // page table index    // 中间10位
 #define PTX(la)		((((uintptr_t) (la)) >> PTXSHIFT) & 0x3FF)
 
-// offset in page
+// offset in page    // 最后12位
 #define PGOFF(la)	(((uintptr_t) (la)) & 0xFFF)
 
 // construct linear address from indexes and offset

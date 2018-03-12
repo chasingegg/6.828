@@ -63,7 +63,7 @@ void	page_decref(struct PageInfo *pp);
 void	tlb_invalidate(pde_t *pgdir, void *va);
 
 static inline physaddr_t
-page2pa(struct PageInfo *pp)
+page2pa(struct PageInfo *pp)  // 返回PageInfo指向的物理页的物理地址
 {
 	return (pp - pages) << PGSHIFT;
 }
